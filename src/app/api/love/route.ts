@@ -43,6 +43,9 @@ export async function POST(request: Request) {
     discord: {
       configured: discord.configured,
       delivered: discord.delivered,
+      ...(discord.delivered
+        ? {}
+        : { status: discord.status, reason: discord.reason }),
     },
   });
 }

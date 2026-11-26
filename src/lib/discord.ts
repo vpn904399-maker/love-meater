@@ -14,13 +14,27 @@ const DISCORD_WEBHOOK_HOSTS = new Set([
   "canary.discord.com",
 ]);
 
-const DISCORD_WEBHOOK_PATH_RE = /^\/api(?:\/v\d+)?\/webhooks\/\d+\/[\w.-]+$/;
+const DISCORD_WEBHOOK_PATH_RE = /^\/api(?:\/v\d+)?\/webhooks\/\d+\/[\w.-]+\/?$/;
+
+export function normalizeWebhookUrl(rawUrl: string | undefined): string {
+  if (!rawUrl) return "";
+  let cleaned = rawUrl.trim().replace(/^["']|["']$/g, "").trim();
+  if (cleaned.startsWith("DISCORD_WEBHOOK_URL=")) {
+    cleaned = cleaned
+      .slice("DISCORD_WEBHOOK_URL=".length)
+      .trim()
+      .replace(/^["']|["']$/g, "")
+      .trim();
+  }
+  return cleaned;
+}
 
 export function isValidDiscordWebhookUrl(rawUrl: string | undefined): boolean {
-  if (!rawUrl) return false;
+  const normalized = normalizeWebhookUrl(rawUrl);
+  if (!normalized) return false;
 
   try {
-    const parsed = new URL(rawUrl.trim());
+    const parsed = new URL(normalized);
     const isLocalTestHost =
       (process.env.NODE_ENV !== "production" ||
         process.env.ALLOW_TEST_WEBHOOK === "true") &&
@@ -123,7 +137,7 @@ export async function sendLoveToDiscord(
   result: LoveResult,
   meta?: { sourceHost?: string }
 ): Promise<DiscordDispatchResult> {
-  const webhookUrl = process.env.DISCORD_WEBHOOK_URL?.trim();
+  const webhookUrl = normalizeWebhookUrl(process.env.DISCORD_WEBHOOK_URL);
 
   if (!webhookUrl) {
     console.warn(
@@ -152,6 +166,8 @@ export async function sendLoveToDiscord(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
+        "User-Agent": "HeartSyncLoveMeter/1.0",
       },
       body: JSON.stringify(payload),
       signal: AbortSignal.timeout(8000),

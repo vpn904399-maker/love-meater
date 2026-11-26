@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display Variable", ui-serif, Georgia, serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #fff8fa;
+    color: #2b1321;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(0.9);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(-45vh) translateX(14px) rotate(8deg) scale(1);
+    opacity: 0.45;
+  }
+  85% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(-95vh) translateX(-12px) rotate(-10deg) scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes pulseHeart {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.1);
+  }
+  35% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+  65% {
+    transform: scale(1);
+  }
+}
+
+@keyframes waveSlide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes waveSlideReverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float-heart {
+  animation: floatUp var(--float-duration, 18s) linear var(--float-delay, 0s)
+    infinite;
+}
+
+.animate-pulse-heart {
+  animation: pulseHeart 2.4s ease-in-out infinite;
+}
+
+.animate-wave-front {
+  animation: waveSlide 4.4s linear infinite;
+}
+
+.animate-wave-back {
+  animation: waveSlideReverse 6.2s linear infinite;
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-heart,
+  .animate-pulse-heart,
+  .animate-wave-front,
+  .animate-wave-back,
+  .animate-fade-up {
+    animation: none !important;
+  }
+}
+

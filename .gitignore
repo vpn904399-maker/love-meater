@@ -1,0 +1,29 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Production
+/build
+
+# Local env files
+.env
+.env*.local
+!.env.example
+
+# Vercel
+.vercel
+
+# Local Git upload script
+/git-upload.bat
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
